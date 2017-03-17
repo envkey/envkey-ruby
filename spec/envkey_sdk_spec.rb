@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe EnvkeySdk do
+describe Envkey do
   it "has a version number" do
-    expect(EnvkeySdk::VERSION).not_to be nil
+    expect(Envkey::VERSION).not_to be nil
   end
 
   it "does something useful" do
