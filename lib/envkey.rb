@@ -1,12 +1,8 @@
 require "envkey/version"
 
-begin
-  require "spring/commands"
-  Spring.after_fork do
-    require "envkey/core"
-    Envkey::Core.load_env
-  end
-rescue LoadError
+if defined?(Rails)
+  require "envkey/rails"
+else
   require "envkey/core"
   Envkey::Core.load_env
 end

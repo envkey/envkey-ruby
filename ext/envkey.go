@@ -5,7 +5,6 @@ import (
   "bytes"
   "strings"
   "net/http"
-  // "fmt"
   "encoding/json"
   "io/ioutil"
   "log"
@@ -42,7 +41,8 @@ func EnvJson(envkey *C.char) *C.char {
 func getJson(url string, target interface{}) error {
   r, err := http.Get(url)
   if err != nil {
-      return err
+    log.Fatal(err)
+    return err
   }
   defer r.Body.Close()
 
@@ -55,6 +55,7 @@ func decrypt(cipher, privkey, pw string) (string, error) {
   entityList, err := openpgp.ReadArmoredKeyRing(keyringFileBuffer)
   if (err != nil){
     log.Fatal(err)
+    return "", err
   }
   entity := entityList[0]
 
