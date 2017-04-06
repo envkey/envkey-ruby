@@ -2,6 +2,8 @@ require 'ffi'
 require 'dotenv'
 require 'json'
 require 'set'
+require 'envkey/platform'
+require "byebug"
 
 module Envkey::Core
   extend FFI::Library
@@ -24,10 +26,15 @@ module Envkey::Core
       fork do
         reader.close
 
-        ffi_lib File.expand_path('../../ext/envkey.so', File.dirname(__FILE__))
-        attach_function :EnvJson, [:pointer], :string
+        begin
+          ffi_lib Envkey::Platform.lib_paths
+          attach_function :EnvJson, [:pointer], :string
+        rescue
+          raise "There was a problem loading Envkey on your platform."
+        end
 
         json = EnvJson(FFI::MemoryPointer.from_string(key))
+
         writer.puts json
       end
 
@@ -50,7 +57,7 @@ module Envkey::Core
           end
           return [Set.new(updated_dotenv_vars), Set.new(updated_envkey_vars)]
         else
-          raise "Envkey invalid. Couldn't load env."
+          raise "Envkey invalid. Couldn't load vars."
         end
       end
     end

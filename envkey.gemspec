@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Dane Schneider"]
   spec.email         = ["dane@envkey.com"]
 
-  spec.summary       = "Envkey secures and simplifies app secrets and config by storing it in an encrypted vault and granting access to developers and servers."#%q{TODO: Write a short summary, because Rubygems requires one.}
+  spec.summary       = "Envkey secures and simplifies app secrets and config by storing it in an encrypted vault and granting access to developers and servers."
   # spec.description   = ""#%q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "https://www.envkey.com"
   spec.license       = "MIT"
