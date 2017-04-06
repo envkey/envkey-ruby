@@ -3,7 +3,6 @@ require 'dotenv'
 require 'json'
 require 'set'
 require 'envkey/platform'
-require "byebug"
 
 module Envkey::Core
   extend FFI::Library
