@@ -1,4 +1,4 @@
-require 'ffi'
+  require 'ffi'
 require 'dotenv'
 require 'json'
 require 'set'
