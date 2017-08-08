@@ -1,11 +1,8 @@
-  require 'ffi'
 require 'dotenv'
-require 'json'
 require 'set'
-require 'envkey/platform'
+require 'envkey/fetch'
 
 module Envkey::Core
-  extend FFI::Library
 
   def self.load_env spring_pre_fork_ts=nil,
                     overload_dotenv_vars=[],
@@ -20,46 +17,29 @@ module Envkey::Core
     end
 
     if (key = ENV["ENVKEY"])
-      reader, writer = IO.pipe
+      json = Envkey::Fetch.fetch_env(key)
 
-      fork do
-        reader.close
-
-        begin
-          ffi_lib Envkey::Platform.lib_paths
-          attach_function :EnvJson, [:pointer], :string
-        rescue
-          raise "There was a problem loading Envkey on your platform."
+      if json && json.gsub("\n","").gsub("\r", "") != ""
+        envs = JSON.parse(json)
+        updated_envkey_vars = []
+        envs.each do |k,v|
+          var = k.upcase
+          if !ENV[var] || overload_envkey_vars.include?(var)
+            updated_envkey_vars << var
+            ENV[var] = v
+          end
         end
 
-        json = EnvJson(FFI::MemoryPointer.from_string(key))
-
-        writer.puts json
-      end
-
-      writer.close
-      while json = reader.gets
-        if json && json.gsub("\n","").gsub("\r", "") != ""
-          envs = JSON.parse(json)
-          updated_envkey_vars = []
-          envs.each do |k,v|
-            var = k.upcase
-            if !ENV[var] || overload_envkey_vars.include?(var)
-              updated_envkey_vars << var
-              ENV[var] = v
-            end
-          end
-
-          # avoid printing success message twice in quick succession when using spring
-          if !spring_pre_fork_ts || (Time.now - spring_pre_fork_ts) > 3
-            puts "ENVKEY: vars loaded and decrypted - access with ENV['YOUR_VAR_NAME']"
-          end
-          return [Set.new(updated_dotenv_vars), Set.new(updated_envkey_vars)]
-        else
-          raise "Envkey invalid. Couldn't load vars."
+        # avoid printing success message twice in quick succession when using spring
+        if !spring_pre_fork_ts || (Time.now - spring_pre_fork_ts) > 3
+          puts "ENVKEY: vars loaded and decrypted - access with ENV['YOUR_VAR_NAME']"
         end
+        return [Set.new(updated_dotenv_vars), Set.new(updated_envkey_vars)]
+      else
+        raise "Envkey invalid. Couldn't load vars."
       end
     end
   end
+
 end
 

@@ -1,34 +1,64 @@
 module Envkey::Platform
-
-  def self.lib_paths
-    lib_filenames.map do |fn|
-      File.expand_path("../../ext/#{fn}", File.dirname(__FILE__))
-    end
+  # Normalize the platform OS
+  OS = case os = RbConfig::CONFIG['host_os'].downcase
+  when /linux/
+    "linux"
+  when /darwin/
+    "darwin"
+  when /freebsd/
+    "freebsd"
+  when /netbsd/
+    "netbsd"
+  when /openbsd/
+    "openbsd"
+  when /sunos|solaris/
+    "solaris"
+  when /mingw|mswin/
+    "windows"
+  else
+    os
   end
 
-  def self.lib_filenames
-    is_unix, os, arch, extension = [FFI::Platform.unix?, FFI::Platform::OS, FFI::Platform::ARCH, FFI::Platform::LIBSUFFIX]
+  # Normalize the platform CPU
+  ARCH = case cpu = RbConfig::CONFIG['host_cpu'].downcase
+  when /amd64|x86_64/
+    "x86_64"
+  when /i?86|x86|i86pc/
+    "x86"
+  when /ppc|powerpc/
+    "powerpc"
+  when /^arm/
+    "arm"
+  else
+    cpu
+  end
 
-    platform_parts =
-      if !is_unix
-        raise "Envkey currently only supports unix and OSX platforms"
-      elsif os == "darwin"
-        if arch == "x86_64"
-          ["darwin-10.6-amd64"]
-        else
-          ["darwin-10.6-386"]
-        end
+  def self.fetch_env_path
+    File.expand_path("../../ext/#{lib_filename}", File.dirname(__FILE__))
+  end
+
+  def self.lib_filename
+    platform_part = case OS
+      when "darwin", "linux", "windows", "freebsd", "netbsd", "openbsd"
+        OS
       else
-        if arch == "x86_64"
-          ["linux-amd64", "linux-arm64"]
-        elsif arch == "i386"
-          ["linux-386"]
-        else
-          %w(arm64 arm-7 arm-6 arm-5).map {|s| "linux-#{s}"}
-        end
+        "linux"
       end
 
-    platform_parts.map {|part| "envkey-#{part}.#{extension}"}
+    arch_part = case ARCH
+      when "x86_64"
+        "amd64"
+      when "x86", "powerpc"
+        "386"
+      when "arm"
+        "arm"
+      else
+        "386"
+      end
+
+    ext = platform_part == "windows" ? ".exe" : ""
+
+    ["envkey-fetch", platform_part, arch_part + ext].join("-")
   end
 
 end
