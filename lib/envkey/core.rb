@@ -18,7 +18,6 @@ module Envkey::Core
 
     if (key = ENV["ENVKEY"])
       json = Envkey::Fetch.fetch_env(key)
-
       if json && json.gsub("\n","").gsub("\r", "") != ""
         envs = JSON.parse(json)
         updated_envkey_vars = []
