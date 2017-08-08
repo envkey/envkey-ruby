@@ -1,5 +1,6 @@
 require 'dotenv'
 require 'set'
+require 'json'
 require 'envkey/fetch'
 
 module Envkey::Core

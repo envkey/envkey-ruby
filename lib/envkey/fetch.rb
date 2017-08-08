@@ -1,4 +1,3 @@
-require 'json'
 require 'envkey/platform'
 
 module Envkey::Fetch
