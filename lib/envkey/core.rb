@@ -18,9 +18,9 @@ module Envkey::Core
     end
 
     if (key = ENV["ENVKEY"])
-      json = Envkey::Fetch.fetch_env(key)
-      if json && json.gsub("\n","").gsub("\r", "") != ""
-        envs = JSON.parse(json)
+      res = Envkey::Fetch.fetch_env(key)
+      if res && res.gsub("\n","").gsub("\r", "") != "" && !res.start_with?("error:")
+        envs = JSON.parse(res)
         updated_envkey_vars = []
         envs.each do |k,v|
           var = k.upcase
@@ -30,14 +30,12 @@ module Envkey::Core
           end
         end
 
-        # avoid printing success message twice in quick succession when using spring
-        if !spring_pre_fork_ts || (Time.now - spring_pre_fork_ts) > 3
-          puts "ENVKEY: vars loaded and decrypted - access with ENV['YOUR_VAR_NAME']"
-        end
         return [Set.new(updated_dotenv_vars), Set.new(updated_envkey_vars)]
       else
-        raise "Envkey invalid. Couldn't load vars."
+        raise "ENVKEY invalid. Couldn't load vars."
       end
+    else
+      raise "ENVKEY missing - must be set as an environment variable or in a gitignored .env file in the root of your project. Go to https://www.envkey.com if you don't know what an ENVKEY is."
     end
   end
 

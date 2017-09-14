@@ -5,18 +5,12 @@ module Envkey::Platform
     "linux"
   when /darwin/
     "darwin"
-  when /freebsd/
+  when /bsd/
     "freebsd"
-  when /netbsd/
-    "netbsd"
-  when /openbsd/
-    "openbsd"
-  when /sunos|solaris/
-    "solaris"
   when /mingw|mswin/
     "windows"
   else
-    os
+    "linux"
   end
 
   # Normalize the platform CPU
@@ -33,32 +27,29 @@ module Envkey::Platform
     cpu
   end
 
-  def self.fetch_env_path
-    File.expand_path("../../ext/#{lib_filename}", File.dirname(__FILE__))
-  end
-
-  def self.lib_filename
-    platform_part = case OS
-      when "darwin", "linux", "windows", "freebsd", "netbsd", "openbsd"
+  def self.platform_part
+    case OS
+      when "darwin", "linux", "windows", "freebsd"
         OS
       else
         "linux"
       end
+  end
 
-    arch_part = case ARCH
-      when "x86_64"
-        "amd64"
-      when "x86", "powerpc"
-        "386"
-      when "arm"
-        "arm"
-      else
-        "386"
-      end
+  def self.arch_part
+    ARCH == "x86_64" ? "amd64" : "386"
+  end
 
-    ext = platform_part == "windows" ? ".exe" : ""
+  def self.ext
+    platform_part == "windows" ? ".exe" : ""
+  end
 
-    ["envkey-fetch", platform_part, arch_part + ext].join("-")
+  def self.fetch_env_path
+    File.expand_path("../../ext/#{lib_file_dir}/envkey-fetch#{ext}", File.dirname(__FILE__))
+  end
+
+  def self.lib_file_dir
+    ["envkey-fetch", Envkey::ENVKEY_FETCH_VERSION.to_s, platform_part, arch_part].join("_")
   end
 
 end
