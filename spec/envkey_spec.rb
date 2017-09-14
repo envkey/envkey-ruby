@@ -4,6 +4,9 @@ require "envkey/core"
 VALID_ENVKEY = "Emzt4BE7C23QtsC7gb1z-3NvfNiG1Boy6XH2o-env-staging.envkey.com"
 INVALID_ENVKEY = "Emzt4BE7C23QtsC7gb1z-3NvfNiG1Boy6XH2oinvalid-env-staging.envkey.com"
 INVALID_ENVKEY2 = "Emzt4BE7C23QtsC7gb1zinvalid-3NvfNiG1Boy6XH2o-env-staging.envkey.com"
+INVALID_ENVKEY3 = "Emzt4BE7C23QtsC7gb1zinvalid-3NvfNiG1Boy6XH2o-localhost:387946"
+INVALID_ENVKEY4 = "invalid"
+
 
 describe Envkey do
   after do
@@ -40,6 +43,12 @@ describe Envkey do
     expect { Envkey::Core.load_env }.to raise_error(/ENVKEY invalid/)
 
     ENV["ENVKEY"] = INVALID_ENVKEY2
+    expect { Envkey::Core.load_env }.to raise_error(/ENVKEY invalid/)
+
+    ENV["ENVKEY"] = INVALID_ENVKEY3
+    expect { Envkey::Core.load_env }.to raise_error(/ENVKEY invalid/)
+
+    ENV["ENVKEY"] = INVALID_ENVKEY4
     expect { Envkey::Core.load_env }.to raise_error(/ENVKEY invalid/)
   end
 
