@@ -12,7 +12,7 @@ gem 'envkey'
 
 If you're using Rails, that's all you need. In plain Ruby, you need to require envkey at the entry point of your application.
 
-```
+```ruby
 require 'envkey'
 ```
 
