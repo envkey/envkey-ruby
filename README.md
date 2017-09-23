@@ -1,41 +1,73 @@
-# Envkey
+# envkey
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/envkey`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Integrate [EnvKey](https://www.envkey.com) with your Ruby or Ruby On Rails projects to keep api keys, credentials, and other configuration securely and automatically in sync for developers and servers.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+In your Gemfile:
 
 ```ruby
-gem 'envkey'
+gem install 'envkey'
 ```
 
-And then execute:
+If you're using Rails, that's all you need. In plain Ruby, you need to require envkey at the entry point of your application.
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install envkey
+```
+require 'envkey'
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Generate an `ENVKEY` in the [EnvKey App](https://github.com/envkey/envkey-app). Then set `ENVKEY=...`, either in a gitignored `.env` file in the root of your project (in development) or in an environment variable (on servers).
 
-## Development
+Now all your EnvKey variables will be available on `ENV`.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Errors
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+The gem will throw an error if an `ENVKEY` is missing or invalid.
 
-## Contributing
+### Example
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/envkey.
+Assume you have `STRIPE_SECRET_KEY` set to `sk_test_2a33b045e998d2ef60c7861d2ac22ea8` for the `development` environment in the EnvKey App. You generate a local development `ENVKEY`.
 
+In your project's **gitignored** `.env` file:
 
-## License
+```bash
+# .env
+ENVKEY=GsL8zC74DWchdpvssa9z-nk7humd7hJmAqNoA
+```
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+In `config/initializers/stripe.rb`:
+
+```ruby
+Stripe.api_key = ENV.fetch("STRIPE_SECRET_KEY")
+```
+
+Now `STRIPE_SECRET_KEY` will stay automatically in sync for all the developers on your team.
+
+On your servers, set the `ENVKEY` as an environment variable instead of putting it in a `.env` file.
+
+Now your servers will stay in sync as well. If you need to rotate your `STRIPE_SECRET_KEY` you can do it in a few seconds in the EnvKey App, restart your servers, and you're good to go. All your team's developers and all your servers will have the new value.
+
+### Overriding Vars
+
+The envkey gem will not overwrite existing environment variables or additional variables set in a `.env` file. This can be convenient for customizing environments that otherwise share the same configuration. You can read more about this topic in the EnvKey [docs](https://docs.envkey.com/overriding-envkey-variables.html).
+
+### Working Offline
+
+The envkey gem caches your encrypted config in development so that you can still use it while offline. Your config will still be available (though possibly not up-to-date) the next time you lose your internet connection. If you do have a connection available, envkey will always load the latest config. Your cached encrypted config is stored in `$HOME/.envkey/cache`
+
+## Further Reading
+
+For more on EnvKey in general:
+
+Read the [docs](https://docs.envkey.com).
+
+Read the [integration quickstart](https://docs.envkey.com/integration-quickstart.html).
+
+Read the [security and cryptography overview](https://security.envkey.com).
+
+## Need help? Have questions, feedback, or ideas?
+
+Post an [issue](https://github.com/envkey/envkey-ruby/issues) or email us: [support@envkey.com](mailto:support@envkey.com).
 
