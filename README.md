@@ -7,7 +7,7 @@ Integrate [EnvKey](https://www.envkey.com) with your Ruby or Ruby On Rails proje
 In your Gemfile:
 
 ```ruby
-gem install 'envkey'
+gem 'envkey'
 ```
 
 If you're using Rails, that's all you need. In plain Ruby, you need to require envkey at the entry point of your application.
