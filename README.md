@@ -61,7 +61,7 @@ For caching purposes, the gem assumes you're in development mode if either `ENV[
 
 ## envkey-fetch binaries
 
-If you look in the `ext` directory of this gem, you'll find a number of `envkey-fetch` binaries for various platforms and architectures. These are output by the [envkey-fetch Go library](https://github.com/envkey/envkey-fetch). It contains EnvKey's core cross-platform fetching, decryption, redundancy, verification, and web of trust logic. It is completely open source.
+If you look in the `ext` directory of this gem, you'll find a number of `envkey-fetch` binaries for various platforms and architectures. These are output by the [envkey-fetch Go library](https://github.com/envkey/envkey-fetch). It contains EnvKey's core cross-platform fetching, decryption, verification, web of trust, redundancy, and caching logic. It is completely open source.
 
 ## Further Reading
 
