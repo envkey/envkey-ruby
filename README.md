@@ -59,7 +59,7 @@ The envkey gem caches your encrypted config in development so that you can still
 
 For caching purposes, the gem assumes you're in development mode if either `ENV["RAILS_ENV"]` or `ENV["RACK_ENV"]` is `"development"` or `"test"`. If you aren't using Rails or Rack, then it's assumed you're in development mode when a `.env` file exists in the root of your project.
 
-### envkey-fetch binaries
+## envkey-fetch binaries
 
 If you look in the `ext` directory of this gem, you'll find a number of `envkey-fetch` binaries for various platforms and architectures. These are output by the [envkey-fetch Go library](https://github.com/envkey/envkey-fetch). It contains EnvKey's core cross-platform fetching, decryption, redundancy, verification, and web of trust logic. It is completely open source.
 
