@@ -10,7 +10,8 @@ module Envkey::Fetch
   def self.is_dev
     dev_vals = %w(development test)
     dev_vals.include?(ENV["RAILS_ENV"]) ||
-    dev_vals.include?(ENV["RACK_ENV"])
+      dev_vals.include?(ENV["RACK_ENV"]) ||
+      (ENV["RAILS_ENV"].nil? && ENV["RACK_ENV"].nil? && File.exist?(".env"))
   end
 
 end

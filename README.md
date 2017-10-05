@@ -57,6 +57,8 @@ The envkey gem will not overwrite existing environment variables or additional v
 
 The envkey gem caches your encrypted config in development so that you can still use it while offline. Your config will still be available (though possibly not up-to-date) the next time you lose your internet connection. If you do have a connection available, envkey will always load the latest config. Your cached encrypted config is stored in `$HOME/.envkey/cache`
 
+For caching purposes, the gem assumes you're in development mode if either `ENV["RAILS_ENV"]` or `ENV["RACK_ENV"]` is `"development"` or `"test"`. If you aren't using Rails or Rack, then it's assumed you're in development mode when a `.env` file exists in the root of your project.
+
 ## Further Reading
 
 For more on EnvKey in general:
