@@ -4,7 +4,7 @@ module Envkey::Fetch
 
   def self.fetch_env key
     fetch_env_path = Envkey::Platform.fetch_env_path
-    `#{fetch_env_path} #{key}#{is_dev ? ' --cache' : ''} --client-name envkey-ruby --client-version #{Envkey::VERSION}`
+    `#{fetch_env_path} #{key}#{is_dev ? ' --cache' : ''} --client-name envkey-ruby --client-version #{Envkey::VERSION} 2>&1`
   end
 
   def self.is_dev

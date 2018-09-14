@@ -31,6 +31,9 @@ module Envkey::Core
         end
 
         return [Set.new(updated_dotenv_vars), Set.new(updated_envkey_vars)]
+      elsif res.start_with?("error:")
+        STDERR.puts "envkey-fetch " + res
+        raise "ENVKEY invalid. Couldn't load vars."
       else
         raise "ENVKEY invalid. Couldn't load vars."
       end
