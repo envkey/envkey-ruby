@@ -8,12 +8,13 @@ INVALID_ENVKEY2 = "Emzt4BE7C23QtsC7gb1zinvalid-3NvfNiG1Boy6XH2o-env-staging.envk
 INVALID_ENVKEY3 = "Emzt4BE7C23QtsC7gb1zinvalid-3NvfNiG1Boy6XH2o-localhost:387946"
 INVALID_ENVKEY4 = "invalid"
 
-
 describe Envkey do
   after do
     ENV.delete("ENVKEY")
     ENV.delete("TEST")
     ENV.delete("TEST_2")
+    ENV.delete("__ENVKEY_DOT_ENV_VARS")
+    ENV.delete("__ENVKEY_VARS")
   end
 
   it "has a version number" do
@@ -34,6 +35,16 @@ describe Envkey do
   it "doesn't overwrite existing ENV vars" do
     ENV["TEST"] = "otherthing"
     ENV["ENVKEY"] = VALID_ENVKEY
+    Envkey::Core.load_env
+    expect(ENV["TEST"]).to eq("otherthing")
+    expect(ENV["TEST_2"]).to eq("works!")
+  end
+
+  it "does overwrite ENV vars loaded by ENVKEY on subsequent loads, but not pre-existing ENV vars" do
+    ENV["TEST"] = "otherthing"
+    ENV["ENVKEY"] = VALID_ENVKEY
+    Envkey::Core.load_env
+    ENV["TEST_2"] = "to overwrite"
     Envkey::Core.load_env
     expect(ENV["TEST"]).to eq("otherthing")
     expect(ENV["TEST_2"]).to eq("works!")
