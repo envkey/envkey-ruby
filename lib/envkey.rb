@@ -1,10 +1,11 @@
 require "envkey/version"
+require "envkey/core"
 
-if defined?(Rails)
+Envkey::Core.load_env
+
+begin
   require "envkey/rails"
-else
-  require "envkey/core"
-  Envkey::Core.load_env
+rescue LoadError
 end
 
 
