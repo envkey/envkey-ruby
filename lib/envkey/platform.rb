@@ -37,7 +37,13 @@ module Envkey::Platform
   end
 
   def self.arch_part
-    ARCH == "x86_64" ? "amd64" : "386"
+    # workaround for mac M1 chip until Go compiler supports it natively
+    # amd64 seems to work for now
+    if platform_part == "darwin" && ARCH == "arm"
+      "amd64"
+    else
+      ARCH == "x86_64" ? "amd64" : "386"
+    end
   end
 
   def self.ext
