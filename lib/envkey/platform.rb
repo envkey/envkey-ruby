@@ -37,12 +37,12 @@ module Envkey::Platform
   end
 
   def self.arch_part
-    # workaround for mac M1 chip until Go compiler supports it natively
-    # amd64 seems to work for now
     if platform_part == "darwin" && ARCH == "arm"
+      "arm64"
+    elsif ARCH == "x86_64"
       "amd64"
     else
-      ARCH == "x86_64" ? "amd64" : "386"
+      raise "As of 1.3.0, envkey-ruby only supports 64-bit systems. Please use an earlier version for 32-bit support."
     end
   end
 
