@@ -21,7 +21,7 @@ module Envkey::Platform
     "x86"
   when /ppc|powerpc/
     "powerpc"
-  when /^arm/
+  when /^arm|^aarch/
     "arm"
   else
     cpu
