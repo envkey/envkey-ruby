@@ -37,7 +37,7 @@ module Envkey::Platform
   end
 
   def self.arch_part
-    if platform_part == "darwin" && ARCH == "arm"
+    if (platform_part == "darwin" || platform_part == "linux") && ARCH == "arm"
       "arm64"
     elsif ARCH == "x86_64"
       "amd64"
