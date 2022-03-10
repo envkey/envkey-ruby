@@ -2,12 +2,20 @@
 
 Integrate [EnvKey](https://www.envkey.com) with your Ruby or Ruby On Rails projects to keep api keys, credentials, and other configuration securely and automatically in sync for developers and servers.
 
+# v2
+
+Now that [EnvKey v2](https://v2.envkey.com) has been released, you can find version 2 of this gem in [a subdirectory of the EnvKey v2 monorepo](https://github.com/envkey/envkey/tree/main/public/sdks/languages-and-frameworks/ruby). Using v2 requires an EnvKey v2 organization (it won't work with ENVKEYs generated in a v1 org).
+
+[Here's a guide on migrating from v1 to v2.](https://docs-v2.envkey.com/docs/migrating-from-v1)
+
+To continue using version 1 of this gem, make sure you specify `~> 1.0.0` in your Gemfile so that you don't accidentally install v2.
+
 ## Installation
 
 In your Gemfile:
 
 ```ruby
-gem 'envkey'
+gem 'envkey', '~> 1.0.0'
 ```
 
 If you're using Rails, that's all you need. In plain Ruby, you need to require envkey at the entry point of your application.
